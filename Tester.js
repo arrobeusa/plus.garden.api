@@ -322,7 +322,16 @@ Tester.prototype = {
   assertHeaderNotExists: function(header, next) {
     this.chai.assert.isUndefined(this.res.headers[header]);
     next();
+  },
+  
+  modifyAndAssertJSON: function(custom_assertion, next) {
+    var self = this;
+    custom_assertion(JSON.parse(this.res.body), function(expected_json, modified_json){
+      expected_json = JSON.parse(expected_json);
+      self.chai.assert.deepEqual(expected_json, modified_json);
+    });
   }
+  
 };
 
 
